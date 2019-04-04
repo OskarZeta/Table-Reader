@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import sortData from '../utils/sort_data';
 import searchData from '../utils/search_data';
+import addNewEntry from '../utils/add_new_entry';
 import Search from './Search';
 import Table from './Table';
 import Pagination from './Pagination';
-import Info from './Info';
+import AddForm from './AddForm';
 
 const ENTRIES_PER_PAGE = 50;
 
 class App extends Component {
   state = {
     data: this.props.defaultData,
+    defaultData: this.props.defaultData,
     sort: {
       by: 'id',
       dir: 'asc'
     },
     page: 1,
-    info: undefined
+    info: undefined,
+    toggleForm: false
   }
   handleSearchClick = substr => {
     if (substr.length) {
-      let searchedData = searchData(substr, this.props.defaultData);
+      let searchedData = searchData(substr, this.state.defaultData);
       this.setState({
         data: searchedData,
         info: undefined
@@ -29,7 +32,7 @@ class App extends Component {
   }
   handleResetClick = () => {
     this.setState({
-      data: this.props.defaultData,
+      data: this.state.defaultData,
       page: 1,
       info: undefined
     });
@@ -59,10 +62,26 @@ class App extends Component {
   handleShowInfo = info => {
     this.setState({ info });
   }
+  handleAddEntry = entry => {
+    let modifiedData = addNewEntry(entry, this.state.defaultData);
+    this.setState({
+      defaultData: modifiedData,
+      data: modifiedData,
+      page: 1,
+      info: undefined
+    });
+  }
+  toggleAddForm = () => {
+    this.setState({
+      toggleForm: !this.state.toggleForm
+    });
+  }
   render() {
     return (
       <div>
         <h1>APP</h1>
+        <button onClick={this.toggleAddForm}>{this.state.toggleForm ? 'Закрыть' : 'Открыть'} форму</button>
+        {this.state.toggleForm && <AddForm handleAddEntry={this.handleAddEntry}/>}
         <Search
           handleSearchClick={this.handleSearchClick}
           handleResetClick={this.handleResetClick}

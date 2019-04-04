@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import App from './App';
-import sortData from '../utils/sort_data';
+//import sortData from '../utils/sort_data';
 
 class Root extends Component {
   state = {

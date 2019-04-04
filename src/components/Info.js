@@ -1,16 +1,21 @@
 import React from 'react';
 
-const Info = ({ handleShowInfo, info }) =>
-  <div>
-    <h3>Info</h3>
-    <div>Выбран пользователь <b>{info.firstName} {info.lastName}</b></div>
-    <div>Описание:</div>
-    <textarea value={info.description} readOnly/>
-    <div>Адрес проживания: <b>{info.address.streetAddress}</b></div>
-    <div>Город: <b>{info.address.city}</b></div>
-    <div>Провинция/штат: <b>{info.address.state}</b></div>
-    <div>Индекс: <b>{info.address.zip}</b></div>
-    <button onClick={() => handleShowInfo()}>close</button>
-  </div>
+const Info = ({ handleShowInfo, info }) => {
+  const { firstName, lastName, description } = info;
+  const { streetAddress, city, state, zip } = info.address;
+  return(
+    <div>
+      <h3>Info</h3>
+      <div>Выбран пользователь <b>{firstName} {lastName}</b></div>
+      <div>Описание:</div>
+      <textarea value={description ? description : 'Недоступно'} readOnly/>
+      <div>Адрес проживания: <b>{streetAddress ? streetAddress : 'Недоступен'}</b></div>
+      <div>Город: <b>{city ? city : 'Недоступен'}</b></div>
+      <div>Провинция/штат: <b>{state ? state : 'Недоступен'}</b></div>
+      <div>Индекс: <b>{zip ? zip : 'Недоступен'}</b></div>
+      <button onClick={() => handleShowInfo()}>close</button>
+    </div>
+  );
+}
 
 export default Info;
