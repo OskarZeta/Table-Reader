@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import validateFormField from '../utils/validate_form_field';
-import FormFieldError from './FormFieldError';
+import ErrorMessage from './ErrorMessage';
+
+const defaultErrorCodes = {};
+defaultErrorCodes.id =
+defaultErrorCodes.firstName =
+defaultErrorCodes.lastName =
+defaultErrorCodes.email =
+defaultErrorCodes.phone = 2;
 
 const defaultState = {
   info: {
@@ -10,13 +17,7 @@ const defaultState = {
     email: '',
     phone: ''
   },
-  errorCodes: {
-    id: 2,
-    firstName: 2,
-    lastName: 2,
-    email: 2,
-    phone: 2
-  },
+  errorCodes: defaultErrorCodes,
   valid: false
 }
 
@@ -48,22 +49,13 @@ class AddForm extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
     this.setState({
-      errorCodes: {
-        id: 2,
-        firstName: 2,
-        lastName: 2,
-        email: 2,
-        phone: 2
-      },
+      errorCodes: defaultErrorCodes,
       valid: false
     });
+    const undefinedInfo = {};
+    undefinedInfo.streetAddress = undefinedInfo.city = undefinedInfo.state = undefinedInfo.zip = undefined;
     this.props.handleAddEntry(Object.assign({}, this.state.info, {
-      address: {
-        streetAddress: undefined,
-        city: undefined,
-        state: undefined,
-        zip: undefined
-      }
+      address: undefinedInfo
     }));
     e.target.reset();
   }
@@ -71,47 +63,76 @@ class AddForm extends Component {
     if (prevState.errorCodes !== this.state.errorCodes) {
       if (Object.values(this.state.errorCodes).every(errorCode => errorCode === 0)) {
         this.setState({ valid: true });
-      }
+      } else if (this.state.valid) this.setState({ valid: false });
     }
   }
   render() {
     const { id, firstName, lastName, email, phone } = this.state.errorCodes;
     return(
-      <form onSubmit={(e) => this.handleFormSubmit(e)}>
-        <table>
-          <tbody>
-            <tr>
-              <th>id</th>
-              <th>firstName</th>
-              <th>lastName</th>
-              <th>email</th>
-              <th>phone</th>
-            </tr>
-            <tr onChange={e => this.handleInfoChange(e)}>
-              <td>
-                <input type="text" name="id" onBlur={e => this.handleFieldValidation(e)}/>
-                {id === 1 && <FormFieldError type="id"/>}
-              </td>
-              <td>
-                <input type="text" name="firstName" onBlur={e => this.handleFieldValidation(e)}/>
-                {firstName === 1 && <FormFieldError type="name"/>}
-              </td>
-              <td>
-                <input type="text" name="lastName" onBlur={e => this.handleFieldValidation(e)}/>
-                {lastName === 1 && <FormFieldError type="name"/>}
-              </td>
-              <td>
-                <input type="text" name="email" onBlur={e => this.handleFieldValidation(e)}/>
-                {email === 1 && <FormFieldError type="email"/>}
-              </td>
-              <td>
-                <input type="text" name="phone" onBlur={e => this.handleFieldValidation(e)}/>
-                {phone === 1 && <FormFieldError type="phone"/>}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button type="submit" disabled={!this.state.valid}>send</button>
+      <form className="mt-4" onSubmit={(e) => this.handleFormSubmit(e)}>
+        <div className="container-fluid" onChange={e => this.handleInfoChange(e)}>
+          <div className="form-group">
+            <label className="row">
+              <span className="col-sm-3 col-form-label">id</span>
+              <div className="col-sm-9">
+                <input
+                  type="text" name="id" onBlur={e => this.handleFieldValidation(e)}
+                  placeholder="введите id" className="form-control"
+                />
+                {id === 1 && <ErrorMessage type="id"/>}
+              </div>
+            </label>
+          </div>
+          <div className="form-group">
+            <label className="row">
+              <span className="col-sm-3 col-form-label">first name</span>
+              <div className="col-sm-9">
+                <input
+                  type="text" name="firstName" onBlur={e => this.handleFieldValidation(e)}
+                  placeholder="введите имя" className="form-control"
+                />
+                {firstName === 1 && <ErrorMessage type="name"/>}
+              </div>
+            </label>
+          </div>
+          <div className="form-group">
+            <label className="row">
+              <span className="col-sm-3 col-form-label">last name</span>
+              <div className="col-sm-9">
+                <input
+                  type="text" name="lastName" onBlur={e => this.handleFieldValidation(e)}
+                  placeholder="введите фамилию" className="form-control"
+                />
+                {lastName === 1 && <ErrorMessage type="name"/>}
+              </div>
+            </label>
+          </div>
+          <div className="form-group">
+            <label className="row">
+              <span className="col-sm-3 col-form-label">email</span>
+              <div className="col-sm-9">
+                <input
+                  type="text" name="email" onBlur={e => this.handleFieldValidation(e)}
+                  placeholder="введите e-mail" className="form-control"
+                />
+                {email === 1 && <ErrorMessage type="email"/>}
+              </div>
+            </label>
+          </div>
+          <div className="form-group">
+            <label className="row">
+              <span className="col-sm-3 col-form-label">phone</span>
+              <div className="col-sm-9">
+                <input
+                  type="text" name="phone" onBlur={e => this.handleFieldValidation(e)}
+                  placeholder="введите телефон" className="form-control"
+                />
+                {phone === 1 && <ErrorMessage type="phone"/>}
+              </div>
+            </label>
+          </div>
+        </div>
+        <button className="btn btn-outline-success" type="submit" disabled={!this.state.valid}>Добавить запись</button>
       </form>
     );
   }
