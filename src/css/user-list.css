@@ -1,0 +1,6 @@
+.user-list tbody tr, .sort {
+  cursor: pointer
+}
+.sort {
+  user-select: none
+}

@@ -12,3 +12,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.btn:focus {
+  outline: 3px!important;
+  box-shadow: 0 0 0 0.1rem rgba(108, 117, 125, 0.5);
+}
+
+@import './bootstrap.css';
+@import './user-list.css';
+@import './header.css';
+@import './info.css';
+@import './spinner.css';
