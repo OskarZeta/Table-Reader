@@ -11,8 +11,8 @@ const ENTRIES_PER_PAGE = 50;
 
 class App extends Component {
   state = {
-    data: this.props.defaultData,
-    defaultData: this.props.defaultData,
+    data: this.props.defaultData || [],
+    defaultData: this.props.defaultData || [],
     sort: { by: undefined, dir: undefined },
     page: 1,
     info: undefined,
